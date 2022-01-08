@@ -26,7 +26,7 @@ const Form = () => {
 
     const selectedCategories = formData.type === 'Income' ? incomeCategories : expenseCategories;
 
-    console.log(formData);
+    // console.log(formData);
     return (
         <Grid container spacing={2}>
             <Grid item xs={12}>
