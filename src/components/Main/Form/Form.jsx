@@ -21,6 +21,7 @@ const Form = () => {
     const { segment } = useSpeechContext();
 
     const createTransaction = () => {
+        if(Number.isNaN(Number(formData.amount)) || formData.date.includes('-')) return;
         const transaction = { ...formData, amount: Number(formData.amount), id: uuidv4() }
         addTransaction(transaction);
         setFormData(initialState);
@@ -45,7 +46,11 @@ const Form = () => {
                         setFormData({ ...formData, amount: e.value });
                         break;
                     case 'category':
-                        setFormData({ ...formData, category });
+                        if(incomeCategories.map((iC) => iC.type).includes(category)) {
+                            setFormData({ ...formData, type: 'Income', category });
+                        } else if(expenseCategories.map((iC) => iC.type).includes(category)) {
+                            setFormData({ ...formData, type: 'Expense', category });
+                        }
                         break;
                     case 'date':
                         setFormData({ ...formData, date: e.value });
@@ -54,6 +59,10 @@ const Form = () => {
                         break;
                 }
             });
+
+            if(segment.isFinal && formData.amount && formData.category && formData.type && formData.date) {
+                createTransaction()
+            }
         }
     }, [segment]);
 
